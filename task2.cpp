@@ -3,9 +3,9 @@ using namespace std;
 
 void fillArray(char*** base);
 void printArray(char*** base, int countTab, int countLine, int size);
-void scanArray(char*** base, int countTab, int countLine, int size, int* tab, int* line);
+void scanArray(char*** base, int countTab, int countLine, int size, int& tab, int& line);
 void enterInArray(char*** base, int countTab, int countLine, int size, int tab, int line);
-void addLineInArray(char*** base, int countTab, int* countLine, int size, int* tab, int* line);
+void addLineInArray(char*** base, int countTab, int& countLine, int size, int& tab, int& line);
 
 void main()
 {
@@ -24,9 +24,20 @@ void main()
 	}
 	fillArray(base);
 	printArray(base, countTab, countLine, size);
-	scanArray(base, countTab, countLine, size, &tab, &line);
+	scanArray(base, countTab, countLine, size, tab, line);
 	enterInArray(base, countTab, countLine, size, tab, line);
 	addLineInArray(base,countTab, &countLine, size, &tab, &line);
+	printArray(base, countTab, countLine, size);
+
+	for (int i = 0; i < countTab; i++)
+	{
+		for (int j = 0; j < countLine; j++)
+		{
+			delete[] (base[i][j]) ;
+		}
+		delete[] (base[i]);
+	}
+	delete[] base;
 }
 
 void fillArray(char *** base)
@@ -55,20 +66,20 @@ void printArray(char *** base, int countTab, int countLine, int size)
 	}
 }
 
-void scanArray(char*** base, int countTab, int countLine, int size, int* tab, int* line)
+void scanArray(char*** base, int countTab, int countLine, int size, int& tab, int& line)
 {
 	int test = 0;
 	char* str = new char[size];
 	cout << "enter the name or phone number to search";
 	cin.getline(str, size);
-	for (tab = 0; *tab < countTab; tab++)
+	for (tab = 0; tab < countTab; tab++)
 	{
-		for (line = 0; *line < countLine; line++)
+		for (line = 0; line < countLine; line++)
 		{
-			int result = strcmp(str, base[*tab][*line]);
+			int result = strcmp(str, base[tab][line]);
 			if (result == 0)
 			{
-				cout << base[0][*line] << "\t" << base[1][*line] << endl;
+				cout << base[0][line] << "\t" << base[1][line] << endl;
 				test++;
 				break;
 			}
@@ -97,22 +108,22 @@ void enterInArray(char *** base, int countTab, int countLine, int size, int tab,
 	cout << endl;
 }
 
-void addLineInArray(char *** base, int countTab, int * countLine, int size, int * tab, int * line)
+void addLineInArray(char *** base, int countTab, int& countLine, int size, int& tab, int& line)
 {
-	int tempCountLine = *(countLine)+1;
+	int tempCountLine = countLine + 1;
 	
 	for (int i = 0; i < countTab; i++)
 	{
 		(base[i]) = new char*[tempCountLine];
-		for (int stepCountLine = *(countLine) = 0; stepCountLine < *countLine; stepCountLine++)
+		for (int stepCountLine = countLine = 0; stepCountLine < countLine; stepCountLine++)
 		{
-			(base[i][j]) = new char[size] {NULL};
+			(base[i][stepCountLine]) = new char[size] {NULL};
 		}
 	}
-	*line = *countLine;
-	*tab = 0;
-	*countLine++;
-	enterInArray(base, countTab, *countLine, size, *tab, *line);
+	line = countLine;
+	tab = 0;
+	countLine++;
+	enterInArray(base, countTab, countLine, size, tab, line);
 }
 
 
